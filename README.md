@@ -8,7 +8,7 @@ business, sport, tech, politics, entertainment
 ### Dataset link: 
 https://www.kaggle.com/datasets/gpreda/bbc-news
 
-##Main logic: 
+## Main logic: 
 - Create categorizer object
 - Train model based on dataset path, delimiter in dataset and path to save model dump
 - After training, you can use load function with dump path to load existing one
