@@ -55,7 +55,8 @@ class Categorizer:
                       metrics=['accuracy'])
 
         # split training data and test data
-        train_label, test_label, train_title, test_title = train_test_split(category, title, test_size=0.2, random_state=42)
+        train_label, test_label, train_title, test_title = train_test_split(category, title, test_size=0.2,
+                                                                            random_state=42)
 
         # train model
         model.fit(train_title, train_label, epochs=10, batch_size=32, validation_split=0.2)
@@ -90,3 +91,21 @@ class Categorizer:
                                                padding='post',
                                                truncating='post')
         return padded_title_sequences
+
+    def validate_on_dataset(self, dataframe: str, delimiter: str, save_model: str) -> float:
+        # read dataset
+        data = pd.read_csv(dataframe, delimiter=delimiter)
+        self.__tokenizer = Tokenizer(num_words=1000)
+        self.__tokenizer.fit_on_texts(data[self.__TITLE_TITLE])
+
+        # prepare and modify dataset to work with keras
+        category, title, category_list = self.__get_prepared_dataset(data, self.__tokenizer)
+
+        # load model
+        model = joblib.load(save_model)
+        train_label, test_label, train_title, test_title = train_test_split(category, title, test_size=0.2,
+                                                                            random_state=42)
+        # Evaluate the model
+        loss, accuracy = model.evaluate(test_title, test_label)
+        print(f'Model accuracy: {accuracy}')
+        return accuracy
