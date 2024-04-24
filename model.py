@@ -48,7 +48,7 @@ class Categorizer:
         model.add(Embedding(1000, 32, input_length=1000))
         model.add(Bidirectional(LSTM(32, return_sequences=True)))
         model.add(Bidirectional(LSTM(16)))
-        model.add(Dense(5, activation='softmax'))
+        model.add(Dense(len(data['category'].unique().tolist()), activation='softmax'))
 
         model.compile(optimizer='adam',
                       loss='sparse_categorical_crossentropy',
